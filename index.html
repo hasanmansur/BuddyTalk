@@ -1,46 +1,98 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>BuddyTalk</title>
+
+    <style type="text/css">
+      
+      .input-block {
+        display: block;
+      }
+
+      .chat-block {
+        display: none;
+      }
+      input {
+        outline: 0;
+        padding: 2px 5px;
+      }
+      input:focus {
+        outline: 0;
+        border: 1px solid #333;
+
+      }
+    </style>
   </head>
   <body>
-    <ul id="messages"></ul>
     
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
 
-    <ul id="clients"></ul>
+    <div class="input-block">
+      <input type="text" id='username' placeholder="User name please ">
+    </div> 
+
+    <div class="chat-block">
+        <p>----------------------------------Message Board---------------------------------</p>
+        <ul id="messages"></ul>
+
+        <p>---------------------------------Loggedin Users---------------------------------</p>
+        <ul id="clients"></ul>
+
+        <p>---------------------------------Available Rooms--------------------------------</p>
+        will fill up later!!!
+
+        <p>---------------------------------Send your message------------------------------</p>
+        <input type="text" id='recipient_user' placeholder="User name please ">
+        <input type="text" id='recipient_room' placeholder="Room name please ">
+
+        <form action="#">
+          <input id="m" autocomplete="off"/>
+          <button>Send</button>
+        </form>
+        
+    </div>
+
+    
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
-      var socket = io();
-      socket.emit('join', { email: 'user1@test.com' });
+      /* jquery */
+      var username = '';
+      var socket;
+      $('form').submit(function(event){
 
-      //jquery functions
-      $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
+              event.preventDefault();
+
+        socket.emit('chat message', $('#m').val(), $('#recipient_user').val());
         $('#m').val('');
+        $('#recipient_user').val('');
         return false;
       });
-      
-      //event listeners
-      socket.on('join', function (msg) {
-        //$('#clients').append($('<li>').text(msg + ' joined'));
-        console.log(msg + ' joined');
-      });
-      socket.on('leave', function (msg) {
-        //$('#clients').append($('<li>').text(msg + ' left'));
-        console.log(msg + ' left');
-      });
-      socket.on('chat message', function(msg){
-        //$('#messages').append($('<li>').text(msg.username + ': ' + msg.message));
-        console.log(msg.username + ': ' + msg.message);
-      });
 
-      
+      $("#username").keydown(function(event){
+       if(event.which == 13) {
+          $('.chat-block').show();
+          $('.input-block').hide();
+          username = $('#username').val();
+          socket = io();
+          socket.emit('join', { email: username });
 
+          //event listeners
+          socket.on('join', function (msg) {
+            $('#clients').append($('<li>').text(msg + ' joined'));
+            //console.log(msg + ' joined');
+          });
+          socket.on('leave', function (msg) {
+            $('#clients').append($('<li>').text(msg + ' left'));
+            //console.log(msg + ' left');
+          });
+          socket.on('chat message', function(msg) {
+            $('#messages').append($('<li>').text(msg.username + ': ' + msg.message));
+            //console.log(msg.username + ': ' + msg.message);
+          });   
+        }
+      });
+ 
     </script>
 
   </body>

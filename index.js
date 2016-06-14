@@ -16,14 +16,21 @@ io.on('connection', function (socket) {
 		socket.username = msg.email;
 		console.log(socket.username + ' joined');
 		socket.broadcast.emit('join', socket.username);
+		socket.join(socket.username);
 	});
 	socket.on('disconnect', function () {
 		console.log(socket.username + ' left');
 		socket.broadcast.emit('leave', socket.username);
 	});
-	socket.on('chat message', function (msg) {
+	socket.on('chat message', function (msg, user) {
 		console.log(socket.username + ': ' + msg);
-		socket.broadcast.emit('chat message', { username: socket.username, message: msg });
+		if (user) {
+			socket.broadcast.to(user).emit('chat message', { username: socket.username, message: msg });
+		}
+		else {
+			socket.broadcast.emit('chat message', { username: socket.username, message: msg });	
+		}
+		
 	});
 });
 
