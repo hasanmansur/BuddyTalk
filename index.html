@@ -34,11 +34,18 @@
         <p>----------------------------------Message Board---------------------------------</p>
         <ul id="messages"></ul>
 
-        <p>---------------------------------Loggedin Users---------------------------------</p>
+        <p>--------------------------------------Users-------------------------------------</p>
         <ul id="clients"></ul>
 
-        <p>---------------------------------Available Rooms--------------------------------</p>
-        will fill up later!!!
+        <p>--------------------------------------Rooms-------------------------------------</p>
+        <ul id="rooms"></ul>
+        Room create/join/leave:
+        
+          <input id="room" autocomplete="off"/>
+          <button id="createBtn">Create</button>
+          <button>Join</button>
+          <button>Leave</button>
+        
 
         <p>---------------------------------Send your message------------------------------</p>
         <input type="text" id='recipient_user' placeholder="User name please ">
@@ -59,15 +66,6 @@
       /* jquery */
       var username = '';
       var socket;
-      $('form').submit(function(event){
-
-              event.preventDefault();
-
-        socket.emit('chat message', $('#m').val(), $('#recipient_user').val());
-        $('#m').val('');
-        $('#recipient_user').val('');
-        return false;
-      });
 
       $("#username").keydown(function(event){
        if(event.which == 13) {
@@ -80,19 +78,28 @@
           //event listeners
           socket.on('join', function (msg) {
             $('#clients').append($('<li>').text(msg + ' joined'));
-            //console.log(msg + ' joined');
           });
           socket.on('leave', function (msg) {
             $('#clients').append($('<li>').text(msg + ' left'));
-            //console.log(msg + ' left');
           });
           socket.on('chat message', function(msg) {
             $('#messages').append($('<li>').text(msg.username + ': ' + msg.message));
-            //console.log(msg.username + ': ' + msg.message);
           });   
         }
       });
- 
+
+      $('form').submit(function(event){
+        event.preventDefault();
+        socket.emit('chat message', $('#m').val(), $('#recipient_user').val());
+        $('#m').val('');
+        $('#recipient_user').val('');
+        return false;
+      });
+
+      $('#createBtn').click(function () {
+        console.log('create button clicked');
+      });
+
     </script>
 
   </body>
