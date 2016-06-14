@@ -27,29 +27,29 @@
     
 
     <div class="input-block">
-      <input type="text" id='username' placeholder="User name please ">
+      <input type="text" id="username" placeholder="User name please ">
     </div> 
 
     <div class="chat-block">
-        <p>----------------------------------Message Board---------------------------------</p>
-        <ul id="messages"></ul>
+        <div id="self"></div>
+        
+        <p>--------------------------------------Loggedin users---------------------------------------</p>
+        <div id="users"></div>
 
-        <p>--------------------------------------Users-------------------------------------</p>
-        <ul id="clients"></ul>
-
-        <p>--------------------------------------Rooms-------------------------------------</p>
+        <p>------------------------------------------Rooms--------------------------------------------</p>
         <ul id="rooms"></ul>
         Room create/join/leave:
-        
           <input id="room" autocomplete="off"/>
-          <button id="createBtn">Create</button>
-          <button>Join</button>
-          <button>Leave</button>
+          <button id="createRoomBtn">Create</button>
+          <button id="joinRoomBtn">Join</button>
+          <button id="leaveRoomBtn">Leave</button>
         
+        <p>--------------------------------------Message Board----------------------------------------</p>
+        <ul id="messages"></ul>
 
-        <p>---------------------------------Send your message------------------------------</p>
-        <input type="text" id='recipient_user' placeholder="User name please ">
-        <input type="text" id='recipient_room' placeholder="Room name please ">
+        <p>-------------------------------------Send your message-------------------------------------</p>
+        <input type="text" id="recipient_user" placeholder="User name please ">
+        <input type="text" id="recipient_room" placeholder="Room name please ">
 
         <form action="#">
           <input id="m" autocomplete="off"/>
@@ -77,27 +77,59 @@
 
           //event listeners
           socket.on('join', function (msg) {
-            $('#clients').append($('<li>').text(msg + ' joined'));
+            //$('#clients').append($('<li>').text(msg.username + ' joined'));
+            var users = '';
+            msg.users.forEach(function (item) {
+              users += item + ' | ';
+            });
+            $('#users').html(users);
           });
           socket.on('leave', function (msg) {
-            $('#clients').append($('<li>').text(msg + ' left'));
+            //$('#clients').append($('<li>').text(msg.username + ' left'));
+            var users = '';
+            msg.users.forEach(function (item) {
+              users += item + ' | ';
+            });
+            $('#users').html(users);
           });
           socket.on('chat message', function(msg) {
             $('#messages').append($('<li>').text(msg.username + ': ' + msg.message));
+          });
+          socket.on('login', function(msg) {
+            $('#self').html('loggedin as: ' + msg.username);
+            var rooms = '';
+            msg.rooms.forEach(function (item) {
+              rooms += item + ' | ';
+            });
+            $('#rooms').html(rooms);
+          });
+          socket.on('createRoom', function (msg) {
+            var rooms = '';
+            msg.rooms.forEach(function (item) {
+              rooms += item + ' | ';
+            });
+            $('#rooms').html(rooms);
           });   
         }
       });
 
       $('form').submit(function(event){
         event.preventDefault();
-        socket.emit('chat message', $('#m').val(), $('#recipient_user').val());
+        socket.emit('chat message', $('#m').val(), $('#recipient_user').val(), $('#recipient_room').val());
         $('#m').val('');
         $('#recipient_user').val('');
+        $('#recipient_room').val('');
         return false;
       });
 
-      $('#createBtn').click(function () {
-        console.log('create button clicked');
+      $('#createRoomBtn').click(function () {
+        socket.emit('createRoom', { room: $('#room').val() });
+        $('#room').val('');
+      });
+
+      $('#joinRoomBtn').click(function () {
+        socket.emit('joinRoom', { room: $('#room').val() });
+        $('#room').val('');
       });
 
     </script>
