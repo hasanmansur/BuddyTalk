@@ -19,7 +19,7 @@ var rooms = [];
 io.on('connection', function (socket) {
 	//event listeners
 	socket.on('join', function (msg) {
-		socket.username = msg.email;
+		socket.username = msg.username;
 		users.push(socket.username);
 		socket.emit('login', { username: socket.username, rooms: rooms });
 		socket.join(socket.username);
