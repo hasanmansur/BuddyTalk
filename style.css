@@ -1,0 +1,16 @@
+.input-block {
+  display: block;
+}
+
+.chat-block {
+  display: none;
+}
+input {
+  outline: 0;
+  padding: 2px 5px;
+}
+input:focus {
+  outline: 0;
+  border: 1px solid #333;
+
+}
