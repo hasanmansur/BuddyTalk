@@ -7,10 +7,6 @@ http.listen(3000, function () {
 	console.log('listening on 3000');
 });
 
-/*app.get('/', function (req, res) {
-	res.sendFile(__dirname + '/index.html');
-});*/
-
 app.use(express.static(__dirname));
 
 var users = [];
@@ -41,8 +37,7 @@ io.on('connection', function (socket) {
 		}
 		if (!user && !room) {
 			socket.broadcast.emit('chat message', { username: socket.username, message: msg });	
-		}
-		
+		}	
 	});
 	socket.on('createRoom', function (msg) {
 		rooms.push(msg.room);
@@ -51,6 +46,16 @@ io.on('connection', function (socket) {
 	});
 	socket.on('joinRoom', function (msg) {
 		socket.join(msg.room);
+		socket.broadcast.to(msg.room).emit('joinRoom', { username: socket.username, room:msg.room });
+	});
+	socket.on('leaveRoom', function (msg) {
+		socket.leave(msg.room);
+		socket.broadcast.to(msg.room).emit('leaveRoom', { username: socket.username, room:msg.room });
 	});
 });
 
+
+
+/*app.get('/', function (req, res) {
+	res.sendFile(__dirname + '/index.html');
+});*/

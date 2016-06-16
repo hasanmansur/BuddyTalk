@@ -1,16 +1,60 @@
-.input-block {
-  display: block;
+body {
+	font-family: sans-serif;
+	color: #333;
+	width: 100%;
+	overflow-x: hidden; 
 }
 
-.chat-block {
+.container {
+	display: block;
+	margin: auto;
+	padding: 20px;
+	margin: 20px;
+}
+.input-block {
+  display: block;
+  padding: 5px;
+  line-height: 1.5em;
+   font-size: 16px;
+}
+
+#username {
+	padding: 5px 10px;
+	line-height: 1.5em;
+	font-size: 16px;
+}
+.chat-block, .user-block {
   display: none;
 }
 input {
   outline: 0;
   padding: 2px 5px;
+  margin-bottom: 10px;
+  border: 1px solid #DDD;
 }
 input:focus {
   outline: 0;
-  border: 1px solid #333;
+  border: 1px solid #666;
 
+}
+
+.user-block , .global-block {
+	float: left;
+	width: 48%;
+	margin-right: 10px;
+}
+.global-block {
+	margin-top: 20px;
+}
+.mh-60 {
+	min-height: 60px;
+	overflow: auto;
+}
+
+.heading {
+	font-weight: bold;
+	font-size: 16px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 5px;
+	color: #333;
 }

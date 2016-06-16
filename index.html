@@ -4,39 +4,50 @@
     <title>BuddyTalk</title>
     <link rel="stylesheet" href="/public/style.css"/>
   </head>
+
   <body>
-  
-    <div class="input-block">
-      <input type="text" id="username" placeholder="User name please ">
-    </div> 
+    <div class="container">
+      <div class="input-block">
+        <input type="text" id="username" placeholder="User name please">
+      </div> 
 
-    <div class="chat-block">
+      <div class="user-block">
         <div id="self"></div>
-        
-        <p>--------------------------------------Loggedin users---------------------------------------</p>
-        <div id="users"></div>
+        <p class="heading"> Message Board </p>
+        <ul id="messages" class="mh-60"></ul>
 
-        <p>------------------------------------------Rooms--------------------------------------------</p>
-        <ul id="rooms"></ul>
-        Room create/join/leave:
-          <input id="room" autocomplete="off"/>
-          <button id="createRoomBtn">Create</button>
-          <button id="joinRoomBtn">Join</button>
-          <button id="leaveRoomBtn">Leave</button>
-        
-        <p>--------------------------------------Message Board----------------------------------------</p>
-        <ul id="messages"></ul>
-
-        <p>-------------------------------------Send your message-------------------------------------</p>
+        <p>Send your message </p>
         <input type="text" id="recipient_user" placeholder="User name please ">
         <input type="text" id="recipient_room" placeholder="Room name please ">
 
         <form action="#">
-          <input id="m" autocomplete="off"/>
+          <input id="m" autocomplete="off" placeholder="Write your message here "/>
           <button>Send</button>
         </form>
-        
+      </div>
+
+      <div class="global-block">
+        <div class="chat-block">
+          <p class="heading"> Global Join/Leave </p>
+          <ul id="join_leave" class="mh-60"></ul>
+
+          <p class="heading"> Room Join/Leave </p>
+          <ul id="room_join_leave" class="mh-60"></ul>
+          
+          <p class="heading"> Loggedin users </p>
+          <div id="users" class="mh-60"></div>
+
+          <p class="heading"> Rooms </p>
+          <ul id="rooms" class="mh-60"></ul>
+          Room:
+          <input id="room" autocomplete="off" placeholder="Room name please "/>
+          <button id="createRoomBtn">Create</button>
+          <button id="joinRoomBtn">Join</button>
+          <button id="leaveRoomBtn">Leave</button>
+        </div>
+      </div>
     </div>
+   
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/jquery-1.11.1.js"></script>
