@@ -1,15 +1,59 @@
 var username = '';
-var socket = io();
 var room = '';
+var socket;
+
 //*********************************DOM manipulation***************************************
 $("#username").keydown(function(event){
  if(event.which == 13) {
     username = $('#username').val().trim();
     if (username.length > 0) {
+      socket = io();
+      socket.emit('join', { username: username });
       $('.chat-block').show();
       $('.user-block').show();
       $('.input-block').hide();
-      socket.emit('join', { username: username });
+
+      //****************************socket event listeners*****************************************
+      socket.on('login', function(msg) {
+        $('#self').html('loggedin as: ' + msg.username);
+      });
+      socket.on('join', function (msg) {
+        $('#join_leave').append($('<li>').text(msg.username + ' joined'));
+        var users = '';
+        msg.users.forEach(function (item) {
+          users += item + ' | ';
+        });
+        $('#users').html(users);
+        var rooms = '';
+        msg.rooms.forEach(function (item) {
+          rooms += item + ' | ';
+        });
+        $('#rooms').html(rooms);
+      });
+      socket.on('leave', function (msg) {
+        $('#join_leave').append($('<li>').text(msg.username + ' left'));
+        var users = '';
+        msg.users.forEach(function (item) {
+          users += item + ' | ';
+        });
+        $('#users').html(users);
+      });
+      socket.on('chat message', function(msg) {
+        $('#messages').append($('<li>').text(msg.username + ': ' + msg.message));
+      });
+      socket.on('createRoom', function (msg) {
+        var rooms = '';
+        msg.rooms.forEach(function (item) {
+          rooms += item + ' | ';
+        });
+        $('#rooms').html(rooms);
+      });
+      socket.on('joinRoom', function (msg) {
+        $('#room_join_leave').append($('<li>').text(msg.username + ' joined in ' + msg.room));
+      });
+      socket.on('leaveRoom', function (msg) {
+        $('#room_join_leave').append($('<li>').text(msg.username + ' left ' + msg.room));
+      });
     }
     else {
       alert('username can\'t be empty');  
@@ -66,44 +110,3 @@ $('#leaveRoomBtn').click(function () {
 });
 
 
-//****************************socket event listeners*****************************************
-socket.on('join', function (msg) {
-  $('#join_leave').append($('<li>').text(msg.username + ' joined'));
-  var users = '';
-  msg.users.forEach(function (item) {
-    users += item + ' | ';
-  });
-  $('#users').html(users);
-});
-socket.on('leave', function (msg) {
-  $('#join_leave').append($('<li>').text(msg.username + ' left'));
-  var users = '';
-  msg.users.forEach(function (item) {
-    users += item + ' | ';
-  });
-  $('#users').html(users);
-});
-socket.on('chat message', function(msg) {
-  $('#messages').append($('<li>').text(msg.username + ': ' + msg.message));
-});
-socket.on('login', function(msg) {
-  $('#self').html('loggedin as: ' + msg.username);
-  var rooms = '';
-  msg.rooms.forEach(function (item) {
-    rooms += item + ' | ';
-  });
-  $('#rooms').html(rooms);
-});
-socket.on('createRoom', function (msg) {
-  var rooms = '';
-  msg.rooms.forEach(function (item) {
-    rooms += item + ' | ';
-  });
-  $('#rooms').html(rooms);
-});
-socket.on('joinRoom', function (msg) {
-  $('#room_join_leave').append($('<li>').text(msg.username + ' joined in ' + msg.room));
-});
-socket.on('leaveRoom', function (msg) {
-  $('#room_join_leave').append($('<li>').text(msg.username + ' left ' + msg.room));
-});

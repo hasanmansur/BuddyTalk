@@ -2,31 +2,58 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var port = process.env.PORT || 3000;
 
-http.listen(3000, function () {
-	console.log('listening on 3000');
+// server
+http.listen(port, function () {
+	console.log('listening on %d', port);
 });
 
 app.use(express.static(__dirname));
 
-var users = [];
-var rooms = [];
+// socketIO - Redis adapter
+var socketio_redis = require('socket.io-redis');
+io.adapter(socketio_redis({ host: 'localhost', port: 6379 }));
+
+// Redis Client
+var redis = require('./node_modules/socket.io-redis/node_modules/redis');
+var redisClient = redis.createClient();
+
+//var users = [];
+//var rooms = [];
 
 io.on('connection', function (socket) {
 	//event listeners
 	socket.on('join', function (msg) {
 		socket.username = msg.username;
+		redisClient.lpush('users', socket.username);
+		socket.join(socket.username);
+		redisClient.lrange('users', 0, -1, function (err, users) {
+			console.log(users);
+			redisClient.lrange('rooms', 0, -1, function (err, rooms) {
+				console.log(rooms);
+				socket.emit('login', { username: socket.username });
+				io.emit('join', { username: socket.username, users: users, rooms: rooms });	
+			});
+		});
+		/*socket.username = msg.username;
 		users.push(socket.username);
 		socket.emit('login', { username: socket.username, rooms: rooms });
 		socket.join(socket.username);
-		io.emit('join', { username: socket.username, users: users });
+		io.emit('join', { username: socket.username, users: users });*/
 	});
 	socket.on('disconnect', function () {
-		var i = users.indexOf(socket.username);
+		redisClient.lrem('users', 0, socket.username, function (err, res) {
+			redisClient.lrange('users', 0, -1, function (err, res) {
+				console.log(res);
+				io.emit('leave', { username: socket.username, users: res });
+			});
+		});
+		/*var i = users.indexOf(socket.username);
 		if (i > -1) {
 			users.splice(i,1);
 		}
-		io.emit('leave', { username: socket.username, users: users });
+		io.emit('leave', { username: socket.username, users: users });*/
 	});
 	socket.on('chat message', function (msg, user, room) {
 		if (user) {
@@ -40,9 +67,14 @@ io.on('connection', function (socket) {
 		}	
 	});
 	socket.on('createRoom', function (msg) {
-		rooms.push(msg.room);
+		//rooms.push(msg.room);
+		redisClient.lpush('rooms', msg.room);
 		socket.join(msg.room);
-		io.emit('createRoom', { rooms: rooms });
+		redisClient.lrange('rooms', 0, -1, function (err, rooms) {
+			console.log(rooms);
+			io.emit('createRoom', { rooms: rooms });	
+		});
+		//io.emit('createRoom', { rooms: rooms });
 	});
 	socket.on('joinRoom', function (msg) {
 		socket.join(msg.room);
@@ -54,8 +86,3 @@ io.on('connection', function (socket) {
 	});
 });
 
-
-
-/*app.get('/', function (req, res) {
-	res.sendFile(__dirname + '/index.html');
-});*/
