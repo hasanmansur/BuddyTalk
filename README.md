@@ -24,7 +24,12 @@ Features
 
 Install & Run
 -------------
-
-Related Links:
--------------
+- Prerequisites:
+      - Node.js
+      - Redis
+- Clone the Repository
+      - git clone https://github.com/hasanmansur/BuddyTalk.git
+- Run the Redis server
+- move to directory /BuddyTalk
+- run node index.js
 
