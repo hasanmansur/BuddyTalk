@@ -40,7 +40,7 @@ Install & Run
 Oops!!! thts all..by now you should get form to give your nick :-)
 
 *** For running multiple socketIO servers you might give the following command:
-      - PORT=3000 node index.js
-        PORT=3001 node index.js
-        PORT=3002 node index.js
-        & so on...
+- PORT=3000 node index.js
+- PORT=3001 node index.js
+- PORT=3002 node index.js & so on...
+        
