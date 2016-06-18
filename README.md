@@ -12,6 +12,9 @@ We are using the following components to build our chat app:
 
 Features
 --------
+- Messaging:
+    *
+    *  
 
 Install & Run
 -------------
