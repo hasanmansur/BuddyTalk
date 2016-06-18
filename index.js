@@ -29,7 +29,7 @@ io.on('connection', function (socket) {
 		redisClient.lpush('users', socket.username);
 		socket.join(socket.username);
 		redisClient.lrange('users', 0, -1, function (err, users) {
-			console.log(users);
+			//console.log(users);
 			redisClient.lrange('rooms', 0, -1, function (err, rooms) {
 				console.log(rooms);
 				socket.emit('login', { username: socket.username });
@@ -71,7 +71,7 @@ io.on('connection', function (socket) {
 		redisClient.lpush('rooms', msg.room);
 		socket.join(msg.room);
 		redisClient.lrange('rooms', 0, -1, function (err, rooms) {
-			console.log(rooms);
+			//console.log(rooms);
 			io.emit('createRoom', { rooms: rooms });	
 		});
 		//io.emit('createRoom', { rooms: rooms });
