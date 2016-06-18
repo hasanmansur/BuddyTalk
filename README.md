@@ -10,3 +10,12 @@ We are using the following components to build our chat app:
 - Socket.io
 - Redis
 
+Features
+--------
+
+Install & Run
+-------------
+
+Related Links:
+-------------
+
