@@ -29,7 +29,12 @@ Install & Run
       - Redis
 - Clone the Repository
       - git clone https://github.com/hasanmansur/BuddyTalk.git
-- Run the Redis server
-- move to directory /BuddyTalk
-- run node index.js
+- Run the Redis server with the following commands:
+      - cd /path/to/redis/directory
+      - ./src/redis-server
+- Run socketIO server with the following commands:
+      - cd /path/to/BuddyTalk/directory
+      - node index.js
+- Open client by entering http://localhost:3000
 
+Oops!!! thts all..by now you should get form to give your nick :-)
