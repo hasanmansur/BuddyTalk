@@ -22,6 +22,9 @@ Features
       - List of Rooms
 - Horizontal Scalability: Can be scaled out (add more node.js/socket.io servers when you need to serve more clients)
 
+*** To make the example simple, features like unique nick validation, unique room name validation & others have been kept out of the 
+project scope. UI is also a minimalistic one for which I owe thanks to [Ahmad Sharif] (https://github.com/theahmadsharif) for giving some of his valuable minutes!
+
 Install & Run
 -------------
 - Prerequisites:
