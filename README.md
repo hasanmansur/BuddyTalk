@@ -12,10 +12,15 @@ We are using the following components to build our chat app:
 
 Features
 --------
-- Messaging:
-    * hjkhkjhkj
-    * kkjkljkljlk
-- hkhfkjshfks:
+- Messaging: Private, Group/Room, Broadcast
+- Room: Create/Join/Leave
+- Dashboard:
+      - Loggedin Nick
+      - Message Board
+      - Log of join/leave (both global & room)
+      - List of loggedin users
+      - List of Rooms
+- Horizontal Scalability: Can be scaled out (add more node.js/socket.io servers when you need to serve more clients)
 
 Install & Run
 -------------
