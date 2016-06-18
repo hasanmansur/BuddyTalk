@@ -13,8 +13,9 @@ We are using the following components to build our chat app:
 Features
 --------
 - Messaging:
-    *
-    *  
+    * hjkhkjhkj
+    * kkjkljkljlk
+- hkhfkjshfks:
 
 Install & Run
 -------------
