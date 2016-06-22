@@ -40,7 +40,7 @@ Install & Run
       - node index.js
 - Open client by entering http://localhost:3000
 
-Oops!!! thts all..by now you should get form to give your nick :-)
+Oops!!! thts all..by now you should get a form to give your nick :-)
 
 *** For running multiple socketIO servers you might give the following command:
 - PORT=3000 node index.js
