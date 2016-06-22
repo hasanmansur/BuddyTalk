@@ -3,12 +3,12 @@ Real-time Chat example using Node.js + Express.js + SocketIO + Redis
 
 What?
 -----
-This example demonstrates a real time horizontally scalable chat application capable of serving concurrent clients.
+This example demonstrates a _**real time horizontally scalable**_ chat application capable of serving concurrent clients.
 We are using the following components to build our chat app:
-- Node.js
-- Express.js
-- Socket.io
-- Redis
+- **Node.js**
+- **Express.js**
+- **Socket.io**
+- **Redis**
 
 Features
 --------
